@@ -22,7 +22,6 @@ A modern, full-stack blog application built with React 19, TypeScript, Redux Too
 - [Deployment](#deployment)
 - [Code Quality](#code-quality)
 - [Assessment Requirements](#assessment-requirements)
-- [Future Improvements](#future-improvements)
 - [License](#license)
 - [Author](#author)
 
@@ -82,7 +81,6 @@ A modern, full-stack blog application built with React 19, TypeScript, Redux Too
 **View All Posts**
 - Paginated list (6 posts per page)
 - Server-side pagination for performance
-- Author email displayed on each post
 - Creation date formatting
 - Page number navigation with Previous/Next buttons
 - Responsive grid layout (1 column mobile, 2 tablet, 3 desktop)
@@ -326,36 +324,6 @@ This project fulfills all requirements for the Withcenter, Inc. Korea technical 
 - Protected routes
 - Loading and error states
 - Modular component architecture
-
----
-
-## Future Improvements
-
-### v1.1.0 - Enhanced Content (Planned)
-- Author attribution
-- Rich text editor with markdown support
-- Image upload and management
-- Draft posts functionality
-- Categories and tags system
-
-
-### v1.2.0 - Social Features (Planned)
-- Comments system
-- Like and bookmark posts
-- User profiles with avatars
-- Follow/unfollow authors
-
-### v1.3.0 - Advanced Features (Planned)
-- Search with filters
-- Dark mode toggle
-- Reading time estimates
-- Social media sharing
-
-### v2.0.0 - Platform Expansion (Future)
-- Mobile app (React Native)
-- Admin dashboard
-- Analytics and insights
-- Multi-language support
 
 ---
 
