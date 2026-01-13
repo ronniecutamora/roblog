@@ -3,6 +3,11 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 import type { BlogState, Blog } from '../../types';
 import { supabase } from '../../lib/supabase';
 
+/**
+ * Initial state for the blog slice.
+ * Tracks the list of blogs, the blog currently being edited,
+ * and the status of the last database request.
+ */
 const initialState: BlogState = {
   blogs: [],
   currentBlog: null,
@@ -12,7 +17,16 @@ const initialState: BlogState = {
   currentPage: 1,
 };
 
-// Fetch all blogs with pagination
+// --- ASYNC THUNKS (The API Calls) ---
+
+/**
+ * fetchBlogs
+ * * * Retrieves a paginated list of blogs from Supabase.
+ * * ALGORITHM:
+ * 1. Calculate 'range' based on page number (e.g., Page 1 is items 0-5).
+ * 2. Fetch the total count of blogs for pagination math.
+ * 3. Fetch the actual data slice, ordered by newest first.
+ */
 export const fetchBlogs = createAsyncThunk(
   'blog/fetchBlogs',
   async (page: number = 1, { rejectWithValue }) => {
@@ -48,7 +62,11 @@ export const fetchBlogs = createAsyncThunk(
   }
 );
 
-// Create blog
+/**
+ * createBlog
+ * * * Saves a new post to the database.
+ * * NOTE: Requires a logged-in user; author_id is pulled from the active session.
+ */
 export const createBlog = createAsyncThunk(
   'blog/createBlog',
   async ({ title, content }: { title: string; content: string }, { rejectWithValue, getState }) => {
@@ -78,7 +96,10 @@ export const createBlog = createAsyncThunk(
   }
 );
 
-// Update blog
+/**
+ * updateBlog
+ * * * Modifies an existing blog post by ID.
+ */
 export const updateBlog = createAsyncThunk(
   'blog/updateBlog',
   async ({ id, title, content }: { id: string; title: string; content: string }, { rejectWithValue }) => {
@@ -99,7 +120,11 @@ export const updateBlog = createAsyncThunk(
   }
 );
 
-// Delete blog
+/**
+ * deleteBlog
+ * * * Removes a blog post from the database.
+ * * RETURNS: The ID of the deleted blog so we can remove it from local state.
+ */
 export const deleteBlog = createAsyncThunk(
   'blog/deleteBlog',
   async (id: string, { rejectWithValue }) => {
@@ -117,14 +142,16 @@ export const deleteBlog = createAsyncThunk(
     }
   }
 );
-
+// Slice
 const blogSlice = createSlice({
   name: 'blog',
   initialState,
   reducers: {
+    /** Sets the blog to be edited (used by BlogForm) */
     setCurrentBlog: (state, action: PayloadAction<Blog | null>) => {
       state.currentBlog = action.payload;
     },
+    /** Clears any error messages from the UI */
     clearError: (state) => {
       state.error = null;
     },

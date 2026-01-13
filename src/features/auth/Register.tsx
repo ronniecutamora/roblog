@@ -3,28 +3,59 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate, Link } from 'react-router-dom';
 import type { AppDispatch, RootState } from '../../app/store';
 import { register, clearError } from './authSlice';
+import ErrorAlert from '../blog/components/ErrorAlert';
 
+/**
+ * Register Component
+ * * * Handles new user account creation.
+ * * FEATURES:
+ * - Client-side validation (password matching and length).
+ * - Synchronization with Redux auth state.
+ * - Automatic redirect upon successful account creation.
+ * - Cleanup logic to prevent error messages from "bleeding" into other pages.
+ */
 export default function Register() {
+  // --- LOCAL STATE ---
+  /** @type {string} User email input */
   const [email, setEmail] = useState('');
+  /** @type {string} Primary password input */
   const [password, setPassword] = useState('');
+  /** @type {string} Second password input for verification */
   const [confirmPassword, setConfirmPassword] = useState('');
   
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
-  const { user, loading, error } = useSelector((state: RootState) => state.auth);
 
+  /** * Global Auth State
+   * Listening for 'user' to handle successful registration 
+   * and 'loading' to manage the UI button state.
+   */
+  const { user, loading, error } = useSelector((state: RootState) => state.auth);
+  /**
+   * SUCCESS REDIRECT
+   * If the register thunk succeeds and a user object is created,
+   * push the user to the homepage.
+   */
   useEffect(() => {
     if (user) {
       navigate('/');
     }
   }, [user, navigate]);
-
+  /**
+   * ERROR CLEANUP
+   * Removes any authentication error messages from the global state
+   * when the user navigates away from the Registration page.
+   */
   useEffect(() => {
     return () => {
       dispatch(clearError());
     };
   }, [dispatch]);
-
+  /**
+   * Form Submission & Validation Logic
+   * Checks for password integrity before attempting a network request.
+   * @param {React.FormEvent} e - Form event object.
+   */
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
@@ -98,11 +129,8 @@ export default function Register() {
             />
           </div>
 
-          {error && (
-            <div className="bg-red-50 border border-red-200 text-red-700 px-4 py-3 rounded-lg">
-              {error}
-            </div>
-          )}
+         {/* Error Message */}
+        {error && <ErrorAlert message={error} />}
 
           <button 
             type="submit" 

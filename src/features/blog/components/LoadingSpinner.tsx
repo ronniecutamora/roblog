@@ -1,7 +1,16 @@
+/**
+ * Properties for the LoadingSpinner component.
+ * @property {string} [message] - Optional text to display below the spinner. 
+ * Defaults to 'Loading...' if not provided.
+ */
 interface LoadingSpinnerProps {
   message?: string;
 }
 
+/**
+ * LoadingSpinner Component
+ *  A full-width/height loading indicator used for page-level data fetching.
+ */
 export default function LoadingSpinner({ message = 'Loading...' }: LoadingSpinnerProps) {
   return (
     <div className="container mx-auto px-4 py-8">
