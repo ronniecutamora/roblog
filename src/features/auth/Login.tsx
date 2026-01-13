@@ -34,7 +34,7 @@ export default function Login() {
       <div className="card max-w-md w-full">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-800 mb-2">Welcome Back</h1>
-          <p className="text-gray-600">Login to continue to RoBlog</p>
+          <p className="text-gray-600">Login to continue to Roblog</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">

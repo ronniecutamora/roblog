@@ -20,7 +20,7 @@ export default function Navbar() {
             to="/" 
             className="text-2xl font-bold hover:text-gray-200 transition-colors"
           >
-            RoBlog
+            Roblog
           </Link>
 
           {/* Navigation Links */}

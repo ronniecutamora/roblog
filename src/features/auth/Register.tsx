@@ -46,7 +46,7 @@ export default function Register() {
       <div className="card max-w-md w-full">
         <div className="text-center mb-8">
           <h1 className="text-3xl font-bold text-gray-800 mb-2">Create Account</h1>
-          <p className="text-gray-600">Join RoBlog today!</p>
+          <p className="text-gray-600">Join Roblog today!</p>
         </div>
 
         <form onSubmit={handleSubmit} className="space-y-6">
