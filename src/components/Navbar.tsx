@@ -3,6 +3,16 @@ import { useDispatch, useSelector } from 'react-redux';
 import type { AppDispatch, RootState } from '../app/store';
 import { logout } from '../features/auth/authSlice';
 
+
+/**
+ * Navbar Component
+ * * The global navigation bar for the application.
+ * * FUNCTIONS:
+ * - Provides navigation links to Home, Login, and Register.
+ * - Displays user-specific links (Create Blog) when authenticated.
+ * - Shows the current user's email badge.
+ * - Handles the logout process via Redux.
+ */
 export default function Navbar() {
   const dispatch = useDispatch<AppDispatch>();
   const { user } = useSelector((state: RootState) => state.auth);
