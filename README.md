@@ -1,4 +1,4 @@
-# RoBlog v1.0.0 - Production Release
+# Roblog v1.0.0 - Production Release
 
 A modern, full-stack blog application built with React 19, TypeScript, Redux Toolkit, and Supabase.
 
