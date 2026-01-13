@@ -9,6 +9,7 @@ import Login from './features/auth/Login';
 import Register from './features/auth/Register';
 import BlogList from './features/blog/BlogList';
 import BlogForm from './features/blog/BlogForm';
+import ViewBlog from './features/blog/ViewBlog';
 
 function App() {
   const dispatch = useDispatch<AppDispatch>();
@@ -21,7 +22,10 @@ function App() {
     <div className="min-h-screen bg-gray-50">
       <Navbar />
       <Routes>
+        {/*View all blogs with pagination */}
         <Route path="/" element={<BlogList />} />
+        {/*View a single blog*/}
+        <Route path="/blog/:id" element={<ViewBlog />} /> 
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route
