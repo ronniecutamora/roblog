@@ -69,7 +69,7 @@ export const fetchBlogs = createAsyncThunk(
  */
 export const createBlog = createAsyncThunk(
   'blog/createBlog',
-  async ({ title, content }: { title: string; content: string }, { rejectWithValue, getState }) => {
+  async ({ title, content }: { title: string; content: string }, { rejectWithValue }) => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
       
