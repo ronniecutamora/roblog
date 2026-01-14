@@ -228,6 +228,7 @@ export default function BlogForm({ mode }: BlogFormProps) {
                 />
                 <button
                   type="button"
+                  disabled={isUploading}
                   onClick={handleRemoveImage}
                   className="absolute top-2 right-2 bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition-colors"
                   aria-label="Remove image"
