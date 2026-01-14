@@ -3,6 +3,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import type { AppDispatch, RootState } from '../../app/store';
 import { createBlog, updateBlog, clearError } from './blogSlice';
+import { uploadImage, deleteImage, validateImageFile, createPreviewUrl, revokePreviewUrl } from '../../lib/imageUpload';
+
 
 /**
  * Properties for the BlogForm component.
@@ -26,10 +28,10 @@ export default function BlogForm({ mode }: BlogFormProps) {
   const dispatch = useDispatch<AppDispatch>();
   const navigate = useNavigate();
 
-  /** * Global Blog State
-   * 'currentBlog' is specifically used during 'edit' mode to populate the fields.
-   */
+  // --- GLOBAL STATE ---
   const { currentBlog, loading, error } = useSelector((state: RootState) => state.blog);
+  const { user } = useSelector((state: RootState) => state.auth);
+
 
   // --- LOCAL FORM STATE ---
   /** @type {string} Stores the draft title */
@@ -37,27 +39,86 @@ export default function BlogForm({ mode }: BlogFormProps) {
   /** @type {string} Stores the draft content body */
   const [content, setContent] = useState('');
 
+
+  // --- LOCAL IMAGE STATE ---
+  /** @type {File | null} The actual binary file object chosen from the user's hard drive */
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  /** @type {string | null} A temporary 'Object URL' created by the browser to show the user their photo instantly */
+  const [imagePreview, setImagePreview] = useState<string | null>(null);
+  /** @type {string | null} The permanent web link to an image already stored in the Supabase cloud (used when editing an old post) */
+  const [existingImageUrl, setExistingImageUrl] = useState<string | null>(null);
+  /** @type {string | null} Holds any error messages, like 'File too large' or 'Wrong file type' */
+  const [imageError, setImageError] = useState<string | null>(null);
+  /** @type {boolean} A 'loading switch' that stays true while the image is traveling to the cloud */
+  const [isUploading, setIsUploading] = useState(false);
+  /** @type {boolean} A flag to track if the user wants to delete the current image from their post */
+  const [removeImage, setRemoveImage] = useState(false);
+
   /**
    * EDIT PREFILL EFFECT
-   * If the user is editing, we take the data from 'currentBlog' (Redux)
-   * and put it into our local 'useState' variables so the user can see it.
    */
   useEffect(() => {
     if (mode === 'edit' && currentBlog) {
       setTitle(currentBlog.title);
       setContent(currentBlog.content);
+      setExistingImageUrl(currentBlog.image_url);
+
     }
   }, [mode, currentBlog]);
 
   /**
    * CLEANUP EFFECT
-   * Wipes any existing error messages when the user leaves the form.
+   * Wipes any remaining erorr messages and remove image preview
    */
   useEffect(() => {
     return () => {
       dispatch(clearError());
+      // Cleanup preview URL
+      if (imagePreview) {
+        revokePreviewUrl(imagePreview);
+      }
     };
-  }, [dispatch]);
+  }, [dispatch, imagePreview]);
+
+  /**
+   * Handles image file selection
+   */
+  const handleImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    setImageError(null);
+    
+    if (!file) return;
+
+    // Validate file
+    const validationError = validateImageFile(file);
+    if (validationError) {
+      setImageError(validationError);
+      return;
+    }
+
+    // Clear previous preview
+    if (imagePreview) {
+      revokePreviewUrl(imagePreview);
+    }
+
+    // Set new image
+    setSelectedImage(file);
+    setImagePreview(createPreviewUrl(file));
+    setRemoveImage(false);
+  };
+
+  /**
+   * Removes the selected or existing image
+   */
+  const handleRemoveImage = () => {
+    if (imagePreview) {
+      revokePreviewUrl(imagePreview);
+    }
+    setSelectedImage(null);
+    setImagePreview(null);
+    setRemoveImage(true);
+    setImageError(null);
+  };
 
   /**
    * Form Submission Logic
@@ -79,18 +140,50 @@ export default function BlogForm({ mode }: BlogFormProps) {
       return;
     }
 
-    if (mode === 'create') {
-      const result = await dispatch(createBlog({ title, content }));
-      if (result.meta.requestStatus === 'fulfilled') {
-        navigate('/');
+    if (!user) {
+      alert('You must be logged in to create a blog post');
+      return;
+    }
+
+    setIsUploading(true);
+    let imageUrl: string | null = existingImageUrl;
+
+    try {
+      // Handle image upload
+      if (selectedImage) {
+        // If editing and there's an old image, delete it first
+        if (mode === 'edit' && existingImageUrl) {
+          await deleteImage(existingImageUrl);
+        }
+        
+        // Upload new image
+        imageUrl = await uploadImage(selectedImage, user.id);
+      } else if (removeImage && existingImageUrl) {
+        // User wants to remove the image
+        await deleteImage(existingImageUrl);
+        imageUrl = null;
       }
-    } else if (mode === 'edit' && currentBlog) {
-      const result = await dispatch(updateBlog({ id: currentBlog.id, title, content }));
-      if (result.meta.requestStatus === 'fulfilled') {
-        navigate('/');
+      //Create or update blog
+      if (mode === 'create') {
+        const result = await dispatch(createBlog({ title, content }));
+        if (result.meta.requestStatus === 'fulfilled') {
+          navigate('/');
+        }
+      } else if (mode === 'edit' && currentBlog) {
+        const result = await dispatch(updateBlog({ id: currentBlog.id, title, content }));
+        if (result.meta.requestStatus === 'fulfilled') {
+          navigate('/');
+        }
       }
+    } catch (error: any) {
+      setImageError(error.message);
+    } finally {
+      setIsUploading(false);
     }
   };
+
+  // Determine which image to display
+  const displayImage = imagePreview || (!removeImage ? existingImageUrl : null);
 
   return (
     <div className="container mx-auto px-4 py-8 max-w-3xl">
@@ -118,7 +211,67 @@ export default function BlogForm({ mode }: BlogFormProps) {
             />
             <p className="text-xs text-gray-500 mt-1">Minimum 3 characters</p>
           </div>
-            {/* CONTENT TEXTAREA */}
+
+           {/* IMAGE UPLOAD */}
+          <div>
+            <label htmlFor="image" className="label">
+              Featured Image (Optional)
+            </label>
+            
+            {/* Image Preview */}
+            {displayImage && (
+              <div className="mb-4 relative">
+                <img
+                  src={displayImage}
+                  alt="Blog preview"
+                  className="w-full h-64 object-cover rounded-lg border-2 border-gray-200"
+                />
+                <button
+                  type="button"
+                  onClick={handleRemoveImage}
+                  className="absolute top-2 right-2 bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition-colors"
+                  aria-label="Remove image"
+                >
+                  <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+                </button>
+              </div>
+            )}
+
+            {/* File Input */}
+            {!displayImage && (
+              <div className="mt-2">
+                <label
+                  htmlFor="image"
+                  className="flex flex-col items-center justify-center w-full h-32 border-2 border-gray-300 border-dashed rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100 transition-colors"
+                >
+                  <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                    <svg className="w-10 h-10 mb-3 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                    </svg>
+                    <p className="mb-2 text-sm text-gray-500">
+                      <span className="font-semibold">Click to upload</span> or drag and drop
+                    </p>
+                    <p className="text-xs text-gray-500">PNG, JPG, WebP or GIF (MAX. 5MB)</p>
+                  </div>
+                  <input
+                    id="image"
+                    type="file"
+                    className="hidden"
+                    accept="image/jpeg,image/png,image/webp,image/gif"
+                    onChange={handleImageSelect}
+                  />
+                </label>
+              </div>
+            )}
+
+            {imageError && (
+              <p className="text-sm text-red-600 mt-2">{imageError}</p>
+            )}
+          </div>
+
+          {/* CONTENT TEXTAREA */}
           <div>
             <label htmlFor="content" className="label">
               Blog Content
