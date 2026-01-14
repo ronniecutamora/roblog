@@ -81,7 +81,7 @@ export const createBlog = createAsyncThunk(
           {
             title,
             content,
-            imageUrl: imageUrl || null,
+            image_url: imageUrl || null,
             author_id: user.id,
           },
         ])
