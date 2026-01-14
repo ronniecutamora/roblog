@@ -1,4 +1,4 @@
-# RoBlog v1.1.0 - Image Upload Feature
+# Roblog v1.1.0 - Image Upload Feature
 
 A modern, full-stack blog application built with React 19, TypeScript, Redux Toolkit, and Supabase.
 
