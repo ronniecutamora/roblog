@@ -15,6 +15,7 @@ export interface User {
  * @property {string} id - Unique identifier for the post.
  * @property {string} title - The headline of the blog post.
  * @property {string} content - The main body text of the post.
+ * @property {string | null} image_url - Optional URL to the blog's featured image stored in Supabase Storage.
  * @property {string} author_id - Foreign key linking to the User who created it.
  * @property {string} created_at - ISO timestamp of when the post was first saved.
  * @property {string} updated_at - ISO timestamp of the last time the post was modified.
@@ -23,6 +24,7 @@ export interface Blog {
   id: string;
   title: string;
   content: string;
+  image_url: string | null;
   author_id: string;
   created_at: string;
   updated_at: string;
