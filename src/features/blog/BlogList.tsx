@@ -11,6 +11,7 @@ import Pagination from './components/Pagination';
 import LoadingSpinner from './components/LoadingSpinner';
 import EmptyState from './components/EmptyState';
 import ErrorAlert from './components/ErrorAlert';
+import { deleteImage } from '../../lib/imageUpload';
 
 /**
  * BlogList Component
@@ -60,6 +61,13 @@ export default function BlogList() {
    */
   const handleDelete = async (id: string) => {
     if (window.confirm('Are you sure you want to delete this blog?')) {
+       // Find the blog to get its image_url
+    const blogToDelete = blogs.find(blog => blog.id === id);
+
+    // Delete associated image from storage first
+    if (blogToDelete?.image_url) {
+      await deleteImage(blogToDelete.image_url);
+    }
       await dispatch(deleteBlog(id));
       dispatch(fetchBlogs(currentPage));
     }
