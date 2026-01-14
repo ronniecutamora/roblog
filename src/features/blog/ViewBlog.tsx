@@ -113,6 +113,19 @@ export default function ViewBlog() {
 
           {/* Blog Content */}
           <div className="prose prose-lg max-w-none mb-8">
+            {/* Featured Image */}
+            {currentBlog.image_url && (
+              <div className="mb-8">
+                <img
+                  src={currentBlog.image_url}
+                  alt={currentBlog.title}
+                  className="w-full h-auto max-h-96 object-cover rounded-lg shadow-md"
+                  onError={(e) => {
+                    e.currentTarget.style.display = 'none';
+                  }}
+                />
+              </div>
+            )}
             <p className="text-gray-700 whitespace-pre-wrap leading-relaxed">
               {currentBlog.content}
             </p>
