@@ -7,6 +7,8 @@ A modern, full-stack blog application built with React 19, TypeScript, Redux Too
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 
+<img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/04259a38-6eb9-48c6-a41d-49f20e9e8982" />
+
 <img width="1366" height="768" alt="RoBlog Homepage" src="https://github.com/user-attachments/assets/3965a8a7-bbe6-4784-87bc-50e65ca73847" />
 
 <img width="1366" height="768" alt="View Full Blog Post" src="https://github.com/user-attachments/assets/bfb6cdf3-9288-4918-8979-4a1fd8d0c998" />
