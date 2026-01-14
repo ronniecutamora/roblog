@@ -69,7 +69,7 @@ export const fetchBlogs = createAsyncThunk(
  */
 export const createBlog = createAsyncThunk(
   'blog/createBlog',
-  async ({ title, content }: { title: string; content: string }, { rejectWithValue }) => {
+  async ({ title, content, imageUrl }: { title: string; content: string; imageUrl? : string | null }, { rejectWithValue }) => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
       
@@ -81,6 +81,7 @@ export const createBlog = createAsyncThunk(
           {
             title,
             content,
+            imageUrl: imageUrl || null,
             author_id: user.id,
           },
         ])
@@ -98,15 +99,39 @@ export const createBlog = createAsyncThunk(
 
 /**
  * updateBlog
- * * * Modifies an existing blog post by ID.
+ * Modifies an existing blog post by ID with optional image update.
  */
 export const updateBlog = createAsyncThunk(
   'blog/updateBlog',
-  async ({ id, title, content }: { id: string; title: string; content: string }, { rejectWithValue }) => {
+  async (
+    { 
+      id, 
+      title, 
+      content, 
+      imageUrl 
+    }: { 
+      id: string; 
+      title: string; 
+      content: string; 
+      imageUrl?: string | null 
+    },
+    { rejectWithValue }
+  ) => {
     try {
+      const updateData: any = {
+        title,
+        content,
+        updated_at: new Date().toISOString(),
+      };
+
+      // Only update image_url if explicitly provided (including null to remove)
+      if (imageUrl !== undefined) {
+        updateData.image_url = imageUrl;
+      }
+
       const { data, error } = await supabase
         .from('blogs')
-        .update({ title, content, updated_at: new Date().toISOString() })
+        .update(updateData)
         .eq('id', id)
         .select()
         .single();
