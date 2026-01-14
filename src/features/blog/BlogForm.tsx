@@ -146,9 +146,9 @@ export default function BlogForm({ mode }: BlogFormProps) {
     }
 
     setIsUploading(true);
-    let imageUrl: string | null = existingImageUrl;
-
+    
     try {
+      let imageUrl: string | null = existingImageUrl;
       // Handle image upload
       if (selectedImage) {
         // If editing and there's an old image, delete it first
@@ -165,12 +165,12 @@ export default function BlogForm({ mode }: BlogFormProps) {
       }
       //Create or update blog
       if (mode === 'create') {
-        const result = await dispatch(createBlog({ title, content }));
+        const result = await dispatch(createBlog({ title, content, imageUrl }));
         if (result.meta.requestStatus === 'fulfilled') {
           navigate('/');
         }
       } else if (mode === 'edit' && currentBlog) {
-        const result = await dispatch(updateBlog({ id: currentBlog.id, title, content }));
+        const result = await dispatch(updateBlog({ id: currentBlog.id, title, content, imageUrl }));
         if (result.meta.requestStatus === 'fulfilled') {
           navigate('/');
         }
