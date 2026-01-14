@@ -38,19 +38,20 @@ A modern, full-stack blog application built with React 19, TypeScript, Redux Too
 ## What's New in v1.1.0
 
 ### Image Upload Feature
+<img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/a777f5c3-b91f-45ed-8062-954f578250db" />
 - **Upload featured images** for blog posts
+- <img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/2f4b2180-6acb-4181-bbab-ac4107e6b101" />
 - **Image preview** before submission
-- **Drag-and-drop** upload interface
+<img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/e115dee2-ec2f-42c6-8d90-a367130a70c9" />
 - **File validation** (type and size limits)
 - **Automatic cleanup** - images deleted when blog is deleted
 - **Replace images** - old images automatically removed when updating
+<img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/3d809857-c1b1-410b-b88d-e8995da25e04" />
 - **Supabase Storage integration** for scalable image hosting
 
 ### Bug Fixes
 - Fixed button remaining active during image upload
 - Improved error handling for network failures
-- Enhanced image deletion logging
-
 ---
 
 ## Features
@@ -124,7 +125,6 @@ A modern, full-stack blog application built with React 19, TypeScript, Redux Too
 
 ### Image Management
 
-- **Drag-and-drop upload** - Intuitive file selection
 - **Image preview** - See your image before publishing
 - **File validation** - Accepts JPEG, PNG, WebP, GIF (max 5MB)
 - **Automatic cleanup** - Images deleted when blog is deleted
