@@ -1,8 +1,8 @@
-# Roblog v1.0.0 - Production Release
+# RoBlog v1.1.0 - Image Upload Feature
 
 A modern, full-stack blog application built with React 19, TypeScript, Redux Toolkit, and Supabase.
 
-![Version](https://img.shields.io/badge/version-1.0.0-blue.svg)
+![Version](https://img.shields.io/badge/version-1.1.0-blue.svg)
 ![React](https://img.shields.io/badge/React-19-61dafb.svg)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
@@ -14,11 +14,13 @@ A modern, full-stack blog application built with React 19, TypeScript, Redux Too
 ## Table of Contents
 
 - [Live Demo](#live-demo)
+- [What's New in v1.1.0](#whats-new-in-v110)
 - [Features](#features)
 - [Tech Stack](#tech-stack)
 - [Project Structure](#project-structure)
 - [Getting Started](#getting-started)
 - [Database Setup](#database-setup)
+- [Storage Setup](#storage-setup)
 - [Deployment](#deployment)
 - [Code Quality](#code-quality)
 - [Assessment Requirements](#assessment-requirements)
@@ -30,6 +32,24 @@ A modern, full-stack blog application built with React 19, TypeScript, Redux Too
 **Deployed Application:** [https://roblog.vercel.app](https://roblog.vercel.app)
 
 **Repository:** [https://github.com/ronniecutamora/roblog](https://github.com/ronniecutamora/roblog)
+
+---
+
+## What's New in v1.1.0
+
+### Image Upload Feature
+- **Upload featured images** for blog posts
+- **Image preview** before submission
+- **Drag-and-drop** upload interface
+- **File validation** (type and size limits)
+- **Automatic cleanup** - images deleted when blog is deleted
+- **Replace images** - old images automatically removed when updating
+- **Supabase Storage integration** for scalable image hosting
+
+### Bug Fixes
+- Fixed button remaining active during image upload
+- Improved error handling for network failures
+- Enhanced image deletion logging
 
 ---
 
@@ -57,14 +77,19 @@ A modern, full-stack blog application built with React 19, TypeScript, Redux Too
 
 **Create Posts**
 - Rich text input for blog content
+- **NEW:** Optional featured image upload
+- **NEW:** Image preview before publishing
 - Title and content validation (minimum character requirements)
-
+- **NEW:** File type validation (JPEG, PNG, WebP, GIF)
+- **NEW:** File size limit (5MB maximum)
 
 <img width="1366" height="768" alt="Edit Blog Post" src="https://github.com/user-attachments/assets/55f40ddc-83e5-467d-908a-e543ebaef062" />
 
 **Edit Posts**
 - Edit only your own posts
 - Pre-filled form with existing data
+- **NEW:** Add, replace, or remove images
+- **NEW:** Automatic deletion of old images when replacing
 - Update timestamps automatically tracked
 - Instant UI updates after saving
 
@@ -72,6 +97,7 @@ A modern, full-stack blog application built with React 19, TypeScript, Redux Too
 
 **Delete Posts**
 - Delete only your own posts
+- **NEW:** Automatic image cleanup from storage
 - Confirmation dialog before deletion
 - Secure deletion with owner verification
 - Automatic list refresh after deletion
@@ -80,17 +106,32 @@ A modern, full-stack blog application built with React 19, TypeScript, Redux Too
 
 **View All Posts**
 - Paginated list (6 posts per page)
+- **NEW:** Featured image thumbnails on blog cards
 - Server-side pagination for performance
+- Author email displayed on each post
 - Creation date formatting
 - Page number navigation with Previous/Next buttons
 - Responsive grid layout (1 column mobile, 2 tablet, 3 desktop)
 
 **Full Post View**
 - Complete blog content without truncation
+- **NEW:** Full-size featured image display
+- Author information display
 - Creation and edit timestamps
 - Owner-only action buttons (Edit/Delete)
 - Back navigation
 - Responsive typography
+
+### Image Management
+
+- **Drag-and-drop upload** - Intuitive file selection
+- **Image preview** - See your image before publishing
+- **File validation** - Accepts JPEG, PNG, WebP, GIF (max 5MB)
+- **Automatic cleanup** - Images deleted when blog is deleted
+- **Replace functionality** - Old images removed when updating
+- **Error handling** - Clear error messages for invalid files
+- **Mobile-responsive** - Upload UI works on all screen sizes
+- **Supabase Storage** - Secure, scalable cloud storage
 
 ### Security
 
@@ -99,17 +140,19 @@ A modern, full-stack blog application built with React 19, TypeScript, Redux Too
 - **Public read access** - All users can view all posts
 - **Protected routes** - Authentication required for create/edit/delete operations
 - **Secure sessions** - JWT-based authentication via Supabase
+- **NEW:** Secure image storage with access policies
 
 ### User Experience
 
 - **Responsive design** - Optimized for mobile, tablet, and desktop
 - **Mobile hamburger menu** - Collapsible navigation on small screens
 - **Modern UI** - Clean, professional design with Tailwind CSS
-- **Loading states** - Visual feedback during data fetching
+- **Loading states** - Visual feedback during data fetching and uploads
 - **Error handling** - User-friendly error messages
 - **Empty states** - Helpful messages when no content exists
 - **Smooth animations** - Transitions and micro-interactions
 - **Accessibility** - ARIA labels and keyboard navigation support
+- **NEW:** Upload progress indicators
 
 ---
 
@@ -120,7 +163,7 @@ A modern, full-stack blog application built with React 19, TypeScript, Redux Too
 | **Frontend** | React 19, TypeScript |
 | **State Management** | Redux Toolkit |
 | **Routing** | React Router v6 |
-| **Backend** | Supabase (PostgreSQL + Auth) |
+| **Backend** | Supabase (PostgreSQL + Auth + Storage) |
 | **Styling** | Tailwind CSS v3 |
 | **Build Tool** | Vite |
 | **Deployment** | Vercel |
@@ -154,7 +197,8 @@ roblog/
 │   │           ├── Pagination.tsx
 │   │           ├── LoadingSpinner.tsx
 │   │           ├── EmptyState.tsx
-│   │           └── ErrorAlert.tsx
+│   │           ├── ErrorAlert.tsx
+│   │           └── ImageUpload.tsx  # NEW
 │   ├── lib/            # External library configs
 │   │   └── supabase.ts
 │   ├── types/          # TypeScript definitions
@@ -204,19 +248,23 @@ roblog/
    
    See [Database Setup](#database-setup) section below.
 
-5. **Disable email confirmation** (for demo purposes)
+5. **Set up Supabase Storage**
+   
+   See [Storage Setup](#storage-setup) section below.
+
+6. **Disable email confirmation** (for demo purposes)
    
    In Supabase Dashboard:
    - Go to **Authentication** → **Providers** → **Email**
    - Disable "Confirm email"
    - Save changes
 
-6. **Run development server**
+7. **Run development server**
 ```bash
    npm run dev
 ```
 
-7. **Open in browser**
+8. **Open in browser**
    
    Navigate to `http://localhost:5173`
 
@@ -231,6 +279,8 @@ CREATE TABLE blogs (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   title TEXT NOT NULL,
   content TEXT NOT NULL,
+  image_url TEXT,           -- NEW: Optional image URL
+  image_path TEXT,          -- NEW: Storage path for deletion
   author_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
@@ -252,8 +302,9 @@ ON blogs FOR UPDATE USING (auth.uid() = author_id);
 CREATE POLICY "Users can delete their own blogs"
 ON blogs FOR DELETE USING (auth.uid() = author_id);
 
--- Create index for pagination performance
+-- Create indexes for performance
 CREATE INDEX blogs_created_at_idx ON blogs(created_at DESC);
+CREATE INDEX blogs_image_url_idx ON blogs(image_url) WHERE image_url IS NOT NULL;  -- NEW
 ```
 
 ### Seed Data (Optional)
@@ -270,13 +321,56 @@ INSERT INTO blogs (title, content, author_id) VALUES
 
 ---
 
+## Storage Setup
+
+**NEW in v1.1.0:** Supabase Storage Configuration
+
+### Create Storage Bucket
+
+1. Go to Supabase Dashboard → **Storage**
+2. Click **New Bucket**
+3. Configuration:
+   - **Name:** `blog-images`
+   - **Public bucket:** ✅ Enabled
+   - **File size limit:** 5MB (recommended)
+   - **Allowed MIME types:** image/jpeg, image/png, image/webp, image/gif
+
+### Set Storage Policies (Run in SQL Editor)
+```sql
+-- Allow authenticated users to upload images
+CREATE POLICY "Users can upload blog images"
+ON storage.objects FOR INSERT
+TO authenticated
+WITH CHECK (bucket_id = 'blog-images');
+
+-- Allow users to update their own images
+CREATE POLICY "Users can update own images"
+ON storage.objects FOR UPDATE
+TO authenticated
+USING (bucket_id = 'blog-images');
+
+-- Allow users to delete their own images
+CREATE POLICY "Users can delete own images"
+ON storage.objects FOR DELETE
+TO authenticated
+USING (bucket_id = 'blog-images');
+
+-- Allow public read access to all images
+CREATE POLICY "Public read access to blog images"
+ON storage.objects FOR SELECT
+TO public
+USING (bucket_id = 'blog-images');
+```
+
+---
+
 ## Deployment
 
 ### Deploy to Vercel
 
 1. Push your code to GitHub
 2. Import repository in Vercel dashboard
-3. Add environment variables in Vercel (Just paste your .env file - Vercel will automatically detect your environement variables):
+3. Add environment variables in Vercel:
    - `VITE_SUPABASE_URL`
    - `VITE_SUPABASE_ANON_KEY`
 4. Deploy
@@ -299,7 +393,8 @@ npm run preview
 - **Full TypeScript coverage** - Type safety across the entire application
 - **Comprehensive JSDoc documentation** - All functions, components, and interfaces documented
 - **Modular component architecture** - Feature-based organization for scalability
-- **Rrror handling** - User-friendly error messages and validation
+- **Single responsibility principle** - Each component has one clear purpose
+- **Professional error handling** - User-friendly error messages and validation
 - **Semantic commit messages** - Clear, conventional commit history
 - **Clean code practices** - Consistent formatting and naming conventions
 
@@ -321,9 +416,12 @@ This project fulfills all requirements for the Withcenter, Inc. Korea technical 
 **Additional Features Implemented:**
 - Row Level Security (RLS) policies
 - Responsive design with mobile menu
+- Author attribution on posts
 - Protected routes
 - Loading and error states
 - Modular component architecture
+- **NEW:** Image upload and management with Supabase Storage
+- **NEW:** Automatic image cleanup and validation
 
 ---
 
@@ -337,17 +435,17 @@ This project is licensed under the MIT License.
 
 **Ronnie Cutamora**
 
-- Portfolio: [Ronnie Cutamora - Software Developer](https://ronniecutamora.com)
+- Portfolio: [Ronnie Cutamora - Software Developer](https://ronniecutamora.vercel.app)
 - GitHub: [@ronniecutamora](https://github.com/ronniecutamora)
 - Email: ronnicutamora47@gmail.com
 
 ---
 
-**Assessment Information**
+## Assessment Information
 
 - **Developed for:** Withcenter, Inc. Korea
-- **Date:** January 13, 2026
-- **Version:** 1.0.0
+- **Date:** January 13-14, 2026
+- **Version:** 1.1.0
 - **Status:** Production Ready
 
 ---
