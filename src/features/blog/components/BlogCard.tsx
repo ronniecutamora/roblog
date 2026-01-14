@@ -11,6 +11,20 @@ interface BlogCardProps {
 export default function BlogCard({ blog, isOwner, onEdit, onDelete }: BlogCardProps) {
   return (
     <div className="card hover:shadow-lg transition-shadow flex flex-col h-full">
+      {/* Featured Image */}
+      {blog.image_url && (
+        <Link to={`/blog/${blog.id}`}>
+          <img
+            src={blog.image_url}
+            alt={blog.title}
+            className="w-full h-48 object-cover rounded-t-lg mb-4 -mt-6 -mx-6"
+            onError={(e) => {
+              // Hide image if it fails to load
+              e.currentTarget.style.display = 'none';
+            }}
+          />
+        </Link>
+      )}
       {/* Make title and content clickable */}
       <Link to={`/blog/${blog.id}`} className="flex-1">
         <h2 className="text-xl font-bold text-gray-800 mb-2 line-clamp-2 hover:text-primary-600 transition-colors">
