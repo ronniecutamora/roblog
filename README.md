@@ -76,7 +76,7 @@ A modern, full-stack blog application built with React 19, TypeScript, Redux Too
 
 ### Blog Management
 
-<img width="1366" height="768" alt="Create Blog Post" src="https://github.com/user-attachments/assets/95c7928d-064b-4531-808e-50a7e9b8b2d9" />
+<img width="1366" height="768" alt="Create Blog Post" src="https://github.com/user-attachments/assets/dd4e8e74-ed99-485f-b637-897c01c36338" />
 
 **Create Posts**
 - Rich text input for blog content
@@ -86,7 +86,7 @@ A modern, full-stack blog application built with React 19, TypeScript, Redux Too
 - **NEW:** File type validation (JPEG, PNG, WebP, GIF)
 - **NEW:** File size limit (5MB maximum)
 
-<img width="1366" height="768" alt="Edit Blog Post" src="https://github.com/user-attachments/assets/55f40ddc-83e5-467d-908a-e543ebaef062" />
+<img width="1366" height="768" alt="Edit Blog Post" src="https://github.com/user-attachments/assets/d5b82fce-c6e6-4f84-a742-fb5407f4fe6d" />
 
 **Edit Posts**
 - Edit only your own posts
@@ -96,7 +96,7 @@ A modern, full-stack blog application built with React 19, TypeScript, Redux Too
 - Update timestamps automatically tracked
 - Instant UI updates after saving
 
-<img width="1366" height="768" alt="Delete Blog Post" src="https://github.com/user-attachments/assets/349185de-6a3f-4e7a-84f9-5269c60aff14" />
+<img width="1366" height="768" alt="Delete Blog Post" src="https://github.com/user-attachments/assets/a4a358e7-e9f2-4610-9005-7c10c3188740" />
 
 **Delete Posts**
 - Delete only your own posts
@@ -111,15 +111,15 @@ A modern, full-stack blog application built with React 19, TypeScript, Redux Too
 - Paginated list (6 posts per page)
 - **NEW:** Featured image thumbnails on blog cards
 - Server-side pagination for performance
-- Author email displayed on each post
 - Creation date formatting
 - Page number navigation with Previous/Next buttons
 - Responsive grid layout (1 column mobile, 2 tablet, 3 desktop)
 
+<img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/04b60ac0-6fa3-445f-9897-a475a45ca72b" />
+
 **Full Post View**
 - Complete blog content without truncation
 - **NEW:** Full-size featured image display
-- Author information display
 - Creation and edit timestamps
 - Owner-only action buttons (Edit/Delete)
 - Back navigation
@@ -418,7 +418,6 @@ This project fulfills all requirements for the Withcenter, Inc. Korea technical 
 **Additional Features Implemented:**
 - Row Level Security (RLS) policies
 - Responsive design with mobile menu
-- Author attribution on posts
 - Protected routes
 - Loading and error states
 - Modular component architecture
