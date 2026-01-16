@@ -1,6 +1,7 @@
 import { configureStore } from '@reduxjs/toolkit';
 import authReducer from '../features/auth/authSlice';
 import blogReducer from '../features/blog/blogSlice';
+import commentReducer from '../features/comment/commentSlice';
 /**
  * Redux Store Configuration
  * * This is the central repository for the application's global state.
@@ -11,7 +12,9 @@ export const store = configureStore({
     // Manages user authentication, session data, and login errors
     auth: authReducer,
     // Manages blog posts, loading states for lists, and post creation
-    blog: blogReducer
+    blog: blogReducer,
+    // Manages comments from blog posts
+    comment: commentReducer,
  
   }
 });
