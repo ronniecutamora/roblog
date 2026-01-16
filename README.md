@@ -45,7 +45,6 @@ A modern, full-stack blog application built with React 19, TypeScript, Redux Too
 - **Create comments** on blog posts with optional image attachments
 - **Edit your own comments** with full image management (add, replace, or remove images)
 - **Delete comments** with confirmation dialog
-- **Real-time updates** using Supabase real-time subscriptions
 - **Image support** for comments with preview and validation
 - **Community Discussion** section on each blog post
 - **User-friendly UI** with loading states and error handling
@@ -54,7 +53,6 @@ A modern, full-stack blog application built with React 19, TypeScript, Redux Too
 ### Bug Fixes
 - Fixed UI not updating after comment edits
 - Added missing `updated_at` column for comment tracking
-- Improved error handling for real-time subscriptions
 
 ---
 
@@ -155,7 +153,6 @@ A modern, full-stack blog application built with React 19, TypeScript, Redux Too
   - Replace or remove images
   - Automatic timestamp tracking
 - **Delete comments** - Remove comments with confirmation
-- **Real-time updates** - Comments update instantly across browser tabs
 - **Image support** - Attach JPEG, PNG, WebP, or GIF images to comments
 - **User verification** - Only comment authors can edit/delete their comments
 - **Community Discussion** - Threaded comment display on blog posts
@@ -495,9 +492,7 @@ This project fulfills all requirements for the Withcenter, Inc. Korea technical 
 - Modular component architecture
 - Image upload and management with Supabase Storage
 - Automatic image cleanup and validation
-- **NEW (v1.2.0):** Comments system with real-time updates
 - **NEW (v1.2.0):** Comment editing with image management
-- **NEW (v1.2.0):** Supabase real-time subscriptions
 - **NEW (v1.2.0):** Comment deletion with confirmation
 
 ---
