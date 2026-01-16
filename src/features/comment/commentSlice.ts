@@ -14,17 +14,13 @@ const initialState: CommentState = {
   error: null,
 };
 
-/**
- * Comment Slice
- * Manages the state for the comments feature, including fetching, adding, and removing.
- */
+// ... imports
+// ... initialState
+
 const commentSlice = createSlice({
   name: 'comment',
   initialState,
   reducers: {
-    /** * Resets the comment state. 
-     * Call this when navigating away from a blog to prevent stale data.
-     */
     clearComments: (state) => {
       state.comments = [];
       state.loading = false;
@@ -33,7 +29,6 @@ const commentSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder
-      // Fetch Lifecycle
       .addCase(thunks.fetchComments.pending, (state) => { 
         state.loading = true; 
         state.error = null;
@@ -44,14 +39,24 @@ const commentSlice = createSlice({
       })
       .addCase(thunks.fetchComments.rejected, (state, action) => {
         state.loading = false;
-        state.error = action.payload as string;
+        
+        // FIX: Ignore "AbortError" so it doesn't show as a UI error
+        if (action.error.name !== 'AbortError') {
+            state.error = action.payload as string;
+        }
       })
-      // Add Lifecycle
+      // ... keep addComment and removeComment cases the same
       .addCase(thunks.addComment.fulfilled, (state, action) => {
         state.loading = false;
         state.comments.push(action.payload);
       })
-      // Remove Lifecycle
+      .addCase(thunks.editComment.fulfilled, (state, action) => {
+        state.loading = false;
+        const index = state.comments.findIndex(c => c.id === action.payload.id);
+        if (index !== -1) {
+          state.comments[index] = action.payload;
+        }
+      })
       .addCase(thunks.removeComment.fulfilled, (state, action) => {
         state.loading = false;
         state.comments = state.comments.filter(c => c.id !== action.payload);
