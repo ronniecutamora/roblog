@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit';
 import type { PayloadAction } from '@reduxjs/toolkit';
 import type { BlogState, Blog } from '../../types';
 import { supabase } from '../../lib/supabase';
+import { deleteImage as deleteStorageImage } from '../../lib/imageUpload';
 
 /**
  * Initial state for the blog slice.
@@ -154,6 +155,41 @@ export const deleteBlog = createAsyncThunk(
   'blog/deleteBlog',
   async (id: string, { rejectWithValue }) => {
     try {
+      // Fetch blog to get image_url
+      const { data: blogData, error: blogError } = await supabase
+        .from('blogs')
+        .select('image_url')
+        .eq('id', id)
+        .single();
+
+      if (blogError) throw blogError;
+
+      // Fetch related comments to cleanup images
+      const { data: commentsData, error: commentsError } = await supabase
+        .from('comments')
+        .select('image_url')
+        .eq('blog_id', id);
+
+      if (commentsError) throw commentsError;
+
+      // Delete images from storage (best-effort)
+      try {
+        if (blogData?.image_url) {
+          await deleteStorageImage(blogData.image_url);
+        }
+        if (commentsData && Array.isArray(commentsData)) {
+          for (const c of commentsData) {
+            if (c.image_url) {
+              await deleteStorageImage(c.image_url);
+            }
+          }
+        }
+      } catch (e) {
+        // Log and continue - image cleanup shouldn't block deletion
+        console.error('Image cleanup error', e);
+      }
+
+      // Delete the blog row (comments will cascade)
       const { error } = await supabase
         .from('blogs')
         .delete()

@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import type { AppDispatch, RootState } from '../../app/store';
 import { setCurrentBlog, deleteBlog } from './blogSlice';
 import LoadingSpinner from './components/LoadingSpinner';
+import Comments from './components/Comments';
 
 /**
  * ViewBlog Component
@@ -172,6 +173,8 @@ export default function ViewBlog() {
             </Link>
           </div>
         </article>
+        <Comments blogId={currentBlog.id} />
+
       </div>
     </div>
   );
