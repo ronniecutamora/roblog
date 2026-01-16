@@ -29,7 +29,37 @@ export interface Blog {
   created_at: string;
   updated_at: string;
 }
+/**
+ * Comment Interface
+ * Defines the structure of a comment as stored in the Supabase 'comments' table.
+ * @property {string} id - Unique identifier for the comment.
+ * @property {string} blog_id - Foreign key linking to the parent Blog post.
+ * @property {string} author_id - Foreign key linking to the User who wrote the comment.
+ * @property {string} content - The text body of the comment.
+ * @property {string | null} image_url - Optional URL to an image attached to the comment.
+ * @property {string} created_at - ISO timestamp of when the comment was created.
+ */
+export interface Comment {
+  id: string;
+  blog_id: string;
+  author_id: string;
+  content: string;
+  image_url: string | null;
+  created_at: string;
+}
 
+/**
+ * CommentState Interface
+ * Defines the structure of the Redux slice state for managing comments.
+ * @property {Comment[]} comments - Array of comment records currently loaded into the store.
+ * @property {boolean} loading - Loading indicator for fetch/create/delete operations.
+ * @property {string | null} error - Error message string if an operation fails.
+ */
+export interface CommentState {
+  comments: Comment[];
+  loading: boolean;
+  error: string | null;
+}
 /**
  * AuthState Interface
  * Shape of the authentication data stored in Redux.
