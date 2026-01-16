@@ -136,7 +136,7 @@ A modern, full-stack blog application built with React 19, TypeScript, Redux Too
 - Page number navigation with Previous/Next buttons
 - Responsive grid layout (1 column mobile, 2 tablet, 3 desktop)
 
-<img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/04b60ac0-6fa3-445f-9897-a475a45ca72b" />
+<img width="1366" height="768" alt="Blog with comments" src="https://github.com/user-attachments/assets/c6b73474-0a4a-44ca-9f4f-c86f317304cf" />
 
 **Full Post View**
 - Complete blog content without truncation
