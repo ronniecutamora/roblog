@@ -1,8 +1,8 @@
-# Roblog v1.1.0 - Image Upload Feature
+# Roblog v1.2.0 - Comments Feature
 
 A modern, full-stack blog application built with React 19, TypeScript, Redux Toolkit, and Supabase.
 
-![Version](https://img.shields.io/badge/version-1.1.0-blue.svg)
+![Version](https://img.shields.io/badge/version-1.2.0-blue.svg)
 ![React](https://img.shields.io/badge/React-19-61dafb.svg)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
@@ -34,6 +34,25 @@ A modern, full-stack blog application built with React 19, TypeScript, Redux Too
 **Deployed Application:** [https://roblog.vercel.app](https://roblog.vercel.app)
 
 **Repository:** [https://github.com/ronniecutamora/roblog](https://github.com/ronniecutamora/roblog)
+
+---
+
+## What's New in v1.2.0
+
+### Comments Feature
+- **Create comments** on blog posts with optional image attachments
+- **Edit your own comments** with full image management (add, replace, or remove images)
+- **Delete comments** with confirmation dialog
+- **Real-time updates** using Supabase real-time subscriptions
+- **Image support** for comments with preview and validation
+- **Community Discussion** section on each blog post
+- **User-friendly UI** with loading states and error handling
+- **Edit mode inline** - Switch between view and edit modes without page reload
+
+### Bug Fixes
+- Fixed UI not updating after comment edits
+- Added missing `updated_at` column for comment tracking
+- Improved error handling for real-time subscriptions
 
 ---
 
@@ -122,8 +141,22 @@ A modern, full-stack blog application built with React 19, TypeScript, Redux Too
 - **NEW:** Full-size featured image display
 - Creation and edit timestamps
 - Owner-only action buttons (Edit/Delete)
+- **NEW (v1.2.0):** Community Discussion section with comments
 - Back navigation
 - Responsive typography
+
+### Comments System (NEW in v1.2.0)
+
+- **Create comments** - Add thoughts with optional images
+- **Edit comments** - Update your own comments inline
+  - Change comment text
+  - Replace or remove images
+  - Automatic timestamp tracking
+- **Delete comments** - Remove comments with confirmation
+- **Real-time updates** - Comments update instantly across browser tabs
+- **Image support** - Attach JPEG, PNG, WebP, or GIF images to comments
+- **User verification** - Only comment authors can edit/delete their comments
+- **Community Discussion** - Threaded comment display on blog posts
 
 ### Image Management
 
@@ -189,18 +222,24 @@ roblog/
 │   │   │   ├── authSlice.ts
 │   │   │   ├── Login.tsx
 │   │   │   └── Register.tsx
-│   │   └── blog/       # Blog features
-│   │       ├── blogSlice.ts
-│   │       ├── BlogList.tsx
-│   │       ├── BlogForm.tsx
-│   │       ├── ViewBlog.tsx
-│   │       └── components/
-│   │           ├── BlogCard.tsx
-│   │           ├── Pagination.tsx
-│   │           ├── LoadingSpinner.tsx
-│   │           ├── EmptyState.tsx
-│   │           ├── ErrorAlert.tsx
-│   │           └── ImageUpload.tsx  # NEW
+│   │   ├── blog/       # Blog features
+│   │   │   ├── blogSlice.ts
+│   │   │   ├── BlogList.tsx
+│   │   │   ├── BlogForm.tsx
+│   │   │   ├── ViewBlog.tsx
+│   │   │   └── components/
+│   │   │       ├── BlogCard.tsx
+│   │   │       ├── Pagination.tsx
+│   │   │       ├── LoadingSpinner.tsx
+│   │   │       ├── EmptyState.tsx
+│   │   │       ├── ErrorAlert.tsx
+│   │   │       └── ImageUpload.tsx
+│   │   └── comment/    # Comments feature (NEW)
+│   │       ├── Comment.tsx
+│   │       ├── commentSlice.ts
+│   │       ├── commentService.ts
+│   │       ├── commentThunks.ts
+│   │       └── useComments.ts
 │   ├── lib/            # External library configs
 │   │   └── supabase.ts
 │   ├── types/          # TypeScript definitions
@@ -281,8 +320,8 @@ CREATE TABLE blogs (
   id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
   title TEXT NOT NULL,
   content TEXT NOT NULL,
-  image_url TEXT,           -- NEW: Optional image URL
-  image_path TEXT,          -- NEW: Storage path for deletion
+  image_url TEXT,           -- Optional image URL
+  image_path TEXT,          -- Storage path for deletion
   author_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
@@ -306,7 +345,38 @@ ON blogs FOR DELETE USING (auth.uid() = author_id);
 
 -- Create indexes for performance
 CREATE INDEX blogs_created_at_idx ON blogs(created_at DESC);
-CREATE INDEX blogs_image_url_idx ON blogs(image_url) WHERE image_url IS NOT NULL;  -- NEW
+CREATE INDEX blogs_image_url_idx ON blogs(image_url) WHERE image_url IS NOT NULL;
+
+-- Create comments table (NEW in v1.2.0)
+CREATE TABLE comments (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  blog_id UUID NOT NULL REFERENCES blogs(id) ON DELETE CASCADE,
+  author_id UUID NOT NULL REFERENCES auth.users(id) ON DELETE CASCADE,
+  content TEXT NOT NULL,
+  image_url TEXT,
+  image_path TEXT,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Enable Row Level Security for comments
+ALTER TABLE comments ENABLE ROW LEVEL SECURITY;
+
+-- RLS Policies for comments
+CREATE POLICY "Comments are viewable by everyone"
+ON comments FOR SELECT USING (true);
+
+CREATE POLICY "Users can create comments"
+ON comments FOR INSERT WITH CHECK (auth.uid() = author_id);
+
+CREATE POLICY "Users can update their own comments"
+ON comments FOR UPDATE USING (auth.uid() = author_id);
+
+CREATE POLICY "Users can delete their own comments"
+ON comments FOR DELETE USING (auth.uid() = author_id);
+
+-- Index for retrieval by blog
+CREATE INDEX comments_blog_id_idx ON comments(blog_id, created_at DESC);
 ```
 
 ### Seed Data (Optional)
@@ -421,8 +491,12 @@ This project fulfills all requirements for the Withcenter, Inc. Korea technical 
 - Protected routes
 - Loading and error states
 - Modular component architecture
-- **NEW:** Image upload and management with Supabase Storage
-- **NEW:** Automatic image cleanup and validation
+- Image upload and management with Supabase Storage
+- Automatic image cleanup and validation
+- **NEW (v1.2.0):** Comments system with real-time updates
+- **NEW (v1.2.0):** Comment editing with image management
+- **NEW (v1.2.0):** Supabase real-time subscriptions
+- **NEW (v1.2.0):** Comment deletion with confirmation
 
 ---
 
@@ -445,8 +519,8 @@ This project is licensed under the MIT License.
 ## Assessment Information
 
 - **Developed for:** Withcenter, Inc. Korea
-- **Date:** January 13-14, 2026
-- **Version:** 1.1.0
+- **Date:** January 13-16, 2026
+- **Version:** 1.2.0
 - **Status:** Production Ready
 
 ---
