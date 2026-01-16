@@ -4,8 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import type { AppDispatch, RootState } from '../../app/store';
 import { setCurrentBlog, deleteBlog } from './blogSlice';
 import LoadingSpinner from './components/LoadingSpinner';
-import Comments from './components/Comments';
-
+import Comments from '../comment/Comment';
 /**
  * ViewBlog Component
  * Displays the full content of a single blog post. 
