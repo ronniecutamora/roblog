@@ -7,11 +7,13 @@ A modern, full-stack blog application built with React 19, TypeScript, Redux Too
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 
-<img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/04259a38-6eb9-48c6-a41d-49f20e9e8982" />
+<img width="1366" height="768" alt="Blog with comments" src="https://github.com/user-attachments/assets/c6b73474-0a4a-44ca-9f4f-c86f317304cf" />
 
-<img width="1366" height="768" alt="RoBlog Homepage" src="https://github.com/user-attachments/assets/3965a8a7-bbe6-4784-87bc-50e65ca73847" />
+<img width="1366" height="768" alt="Create Comment" src="https://github.com/user-attachments/assets/7d0205e0-0b1d-4b59-a7e2-661657c88df7" />
 
-<img width="1366" height="768" alt="View Full Blog Post" src="https://github.com/user-attachments/assets/bfb6cdf3-9288-4918-8979-4a1fd8d0c998" />
+<img width="1366" height="768" alt="Creating Comment" src="https://github.com/user-attachments/assets/b5e1ee14-71b0-4804-b9e9-e98f972cb2a0" />
+
+<img width="1366" height="768" alt="Post Comment" src="https://github.com/user-attachments/assets/e2133e95-77ed-400f-89ba-0760f2c9a210" />
 
 ## Table of Contents
 
