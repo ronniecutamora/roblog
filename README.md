@@ -7,11 +7,13 @@ A modern, full-stack blog application built with React 19, TypeScript, Redux Too
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.9-blue.svg)
 ![License](https://img.shields.io/badge/license-MIT-green.svg)
 
-<img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/04259a38-6eb9-48c6-a41d-49f20e9e8982" />
+<img width="1366" height="768" alt="Blog with comments" src="https://github.com/user-attachments/assets/c6b73474-0a4a-44ca-9f4f-c86f317304cf" />
 
-<img width="1366" height="768" alt="RoBlog Homepage" src="https://github.com/user-attachments/assets/3965a8a7-bbe6-4784-87bc-50e65ca73847" />
+<img width="1366" height="768" alt="Create Comment" src="https://github.com/user-attachments/assets/7d0205e0-0b1d-4b59-a7e2-661657c88df7" />
 
-<img width="1366" height="768" alt="View Full Blog Post" src="https://github.com/user-attachments/assets/bfb6cdf3-9288-4918-8979-4a1fd8d0c998" />
+<img width="1366" height="768" alt="Creating Comment" src="https://github.com/user-attachments/assets/b5e1ee14-71b0-4804-b9e9-e98f972cb2a0" />
+
+<img width="1366" height="768" alt="Post Comment" src="https://github.com/user-attachments/assets/e2133e95-77ed-400f-89ba-0760f2c9a210" />
 
 ## Table of Contents
 
@@ -43,7 +45,6 @@ A modern, full-stack blog application built with React 19, TypeScript, Redux Too
 - **Create comments** on blog posts with optional image attachments
 - **Edit your own comments** with full image management (add, replace, or remove images)
 - **Delete comments** with confirmation dialog
-- **Real-time updates** using Supabase real-time subscriptions
 - **Image support** for comments with preview and validation
 - **Community Discussion** section on each blog post
 - **User-friendly UI** with loading states and error handling
@@ -52,7 +53,6 @@ A modern, full-stack blog application built with React 19, TypeScript, Redux Too
 ### Bug Fixes
 - Fixed UI not updating after comment edits
 - Added missing `updated_at` column for comment tracking
-- Improved error handling for real-time subscriptions
 
 ---
 
@@ -134,7 +134,7 @@ A modern, full-stack blog application built with React 19, TypeScript, Redux Too
 - Page number navigation with Previous/Next buttons
 - Responsive grid layout (1 column mobile, 2 tablet, 3 desktop)
 
-<img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/04b60ac0-6fa3-445f-9897-a475a45ca72b" />
+<img width="1366" height="768" alt="Blog with comments" src="https://github.com/user-attachments/assets/c6b73474-0a4a-44ca-9f4f-c86f317304cf" />
 
 **Full Post View**
 - Complete blog content without truncation
@@ -153,7 +153,6 @@ A modern, full-stack blog application built with React 19, TypeScript, Redux Too
   - Replace or remove images
   - Automatic timestamp tracking
 - **Delete comments** - Remove comments with confirmation
-- **Real-time updates** - Comments update instantly across browser tabs
 - **Image support** - Attach JPEG, PNG, WebP, or GIF images to comments
 - **User verification** - Only comment authors can edit/delete their comments
 - **Community Discussion** - Threaded comment display on blog posts
@@ -493,9 +492,7 @@ This project fulfills all requirements for the Withcenter, Inc. Korea technical 
 - Modular component architecture
 - Image upload and management with Supabase Storage
 - Automatic image cleanup and validation
-- **NEW (v1.2.0):** Comments system with real-time updates
 - **NEW (v1.2.0):** Comment editing with image management
-- **NEW (v1.2.0):** Supabase real-time subscriptions
 - **NEW (v1.2.0):** Comment deletion with confirmation
 
 ---
